@@ -9,7 +9,7 @@
     *{box-sizing:border-box}
     body{margin:0;min-height:100svh;display:grid;place-items:center;overflow:hidden;color:var(--ink);font-family:"STKaiti","KaiTi","Songti SC",serif;background:#1b0d0c}
     body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 50% 32%,#a72a22 0 2%,transparent 22%),linear-gradient(145deg,#571713,#230b0a 60%,#100706);opacity:.9}
-    body::after{content:"";position:fixed;inset:0;opacity:.09;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+    body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.09;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
     .frame{position:relative;width:min(92vw,460px);min-height:min(88svh,760px);padding:42px 26px 28px;text-align:center;background:linear-gradient(135deg,rgba(247,228,190,.97),rgba(229,196,139,.96));border:1px solid #e8c77f;box-shadow:0 25px 80px #0009,inset 0 0 60px #8b4a1b22}
     .frame::before,.frame::after{content:"◆";position:absolute;inset:12px;border:1px solid #aa6d2c55;pointer-events:none;color:var(--red);text-align:left;padding:4px}
     .frame::after{inset:auto 17px 17px auto;border:0;padding:0;transform:rotate(180deg)}
@@ -56,7 +56,7 @@
       <div class="sticks" aria-hidden="true"><i class="stick"></i><i class="stick"></i><i class="stick"></i><i class="stick"></i></div>
       <div class="pot"></div>
     </section>
-    <p class="hint">签文藏于筒中，抽出方知心意</p>
+    <p class="hint">轻点按钮或摇一摇手机</p>
     <button id="draw">摇一摇 · 抽心签</button>
     <section class="result" id="result" role="dialog" aria-modal="true" aria-labelledby="answer">
       <div class="paper">
@@ -69,7 +69,10 @@
   <script>
     const wishes=['爱朱晶晶','想朱晶晶','抱着朱晶晶','不住生朱晶晶的气'];
     const draw=document.querySelector('#draw'),again=document.querySelector('#again'),result=document.querySelector('#result'),answer=document.querySelector('#answer'),frame=document.querySelector('.frame');
-    draw.onclick=()=>{draw.disabled=true;frame.classList.add('shaking');setTimeout(()=>{frame.classList.remove('shaking');answer.textContent=wishes[Math.floor(Math.random()*wishes.length)];result.classList.add('show');again.focus();draw.disabled=false},1100)};
+    let drawing=false,motionReady=false,lastShake=0;
+    function drawWish(){if(drawing||result.classList.contains('show'))return;drawing=true;draw.disabled=true;frame.classList.add('shaking');setTimeout(()=>{frame.classList.remove('shaking');answer.textContent=wishes[Math.floor(Math.random()*wishes.length)];result.classList.add('show');again.focus();draw.disabled=false;drawing=false},1100)}
+    async function enableMotion(){if(motionReady||!window.DeviceMotionEvent)return;try{if(typeof DeviceMotionEvent.requestPermission==='function'&&await DeviceMotionEvent.requestPermission()!=='granted')return}catch{return}window.addEventListener('devicemotion',e=>{const a=e.accelerationIncludingGravity;if(!a)return;const force=Math.abs(a.x||0)+Math.abs(a.y||0)+Math.abs(a.z||0),now=Date.now();if(force>32&&now-lastShake>1800){lastShake=now;drawWish()}});motionReady=true}
+    draw.onclick=()=>{enableMotion();drawWish()};
     again.onclick=()=>{result.classList.remove('show');draw.focus()};
   </script>
 </body>
