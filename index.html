@@ -7,7 +7,7 @@
   <style>
     :root{--void:#16031d;--pink:#ff3f9f;--gold:#ffd45e;--violet:#802dff;--paper:#fff1b9}
     *{box-sizing:border-box}
-    body{margin:0;min-height:100svh;display:grid;place-items:center;overflow:hidden;color:#fff6fc;font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--void)}
+    body{margin:0;min-height:100svh;display:grid;place-items:center;overflow-x:hidden;color:#fff6fc;font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--void)}
     body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 50% 26%,#8d1cc466 0 4%,transparent 29%),radial-gradient(circle at 18% 84%,#ff3f9f33,transparent 27%),linear-gradient(135deg,#16031d,#25042f 55%,#090010);z-index:-2}
     body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.32;background-image:linear-gradient(#ff3f9f12 1px,transparent 1px),linear-gradient(90deg,#ff3f9f12 1px,transparent 1px);background-size:26px 26px;mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 78%,transparent);z-index:-1}
     .frame{position:relative;width:min(92vw,460px);min-height:min(86svh,740px);padding:42px 25px 31px;overflow:hidden;text-align:center;border:1px solid #ff3f9f88;background:linear-gradient(145deg,#31083fdd,#17051fde);box-shadow:0 0 0 3px #ff3f9f18,inset 0 0 48px #802dff24,0 24px 80px #000b}
@@ -25,35 +25,34 @@
     .hint{margin:3px 0 18px;color:#dfb9dc;font-size:14px;letter-spacing:.11em}
     button{position:relative;border:1px solid var(--gold);padding:13px 32px;min-width:190px;color:#2b0634;background:linear-gradient(100deg,var(--gold),#fff0a4);font:700 17px "PingFang SC","Microsoft YaHei",sans-serif;letter-spacing:.17em;cursor:pointer;box-shadow:0 0 16px #ffd45e99,5px 5px 0 #65107d;transition:.18s}
     button:hover{transform:translate(-1px,-1px);box-shadow:0 0 23px #ffd45ecc,7px 7px 0 #65107d}button:active{transform:translate(3px,3px);box-shadow:0 0 9px #ffd45e99,2px 2px 0 #65107d}button:disabled{cursor:wait;opacity:.72}
-    .task{margin:22px 0 0}.task small{color:var(--gold);font-size:12px;letter-spacing:.28em}.blessing{margin:7px 0 0;color:var(--pink);font-weight:700;letter-spacing:.11em;text-shadow:0 0 10px #ff3f9f99}
-    .result{position:absolute;z-index:10;inset:0;display:grid;place-items:center;padding:28px;background:#100016d9;backdrop-filter:blur(8px);opacity:0;visibility:hidden;pointer-events:none;transition:.45s}.result.show{opacity:1;visibility:visible;pointer-events:auto}
+    .blessing{margin:7px 0 24px;color:var(--pink);font-weight:700;letter-spacing:.11em;text-shadow:0 0 10px #ff3f9f99}
+    .result{position:absolute;z-index:10;inset:0;display:grid;place-items:center;padding:28px;background:#100016d9;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .45s}.result.show{opacity:1;pointer-events:auto}
     .paper{position:relative;width:min(330px,91%);padding:43px 25px 35px;border:1px solid var(--gold);background:linear-gradient(135deg,#481058,#190321);box-shadow:0 0 24px #ff3f9faa,0 20px 60px #0009;transform:translateY(28px) scale(.95);transition:.5s cubic-bezier(.2,.9,.2,1)}.show .paper{transform:none}.paper::before,.paper::after{content:"✦";position:absolute;color:var(--gold);font-size:22px}.paper::before{top:10px;left:13px}.paper::after{right:13px;bottom:10px}
     .result small{color:var(--gold);letter-spacing:.28em}.result h2{margin:22px 0 27px;color:#fff4ba;font-size:29px;line-height:1.5;text-shadow:0 0 12px #ffd45e99}.again{min-width:140px;padding:10px 24px;font-size:15px}
     .shaking .machine{animation:shake .12s linear infinite}.shaking .sticks{animation:sticks .12s linear infinite}@keyframes shake{25%{transform:translateX(-6px) rotate(-2deg)}75%{transform:translateX(6px) rotate(2deg)}}@keyframes sticks{50%{transform:translateY(-11px)}}
-    @media(max-height:700px){.frame{min-height:94svh;padding-top:26px}.stage{height:300px}.orbit{width:250px;height:250px}.machine{transform:scale(.88)}.hint{margin-top:-2px}.task{margin-top:15px}}
+    @media(max-height:700px){body{place-items:start center}.frame{min-height:94svh;padding-top:26px}.stage{height:300px}.orbit{width:250px;height:250px}.machine{transform:scale(.88)}.hint{margin-top:-2px}}
     @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
   </style>
 </head>
 <body>
   <main class="frame">
-    <p class="eyebrow">功德充值中心 · 晶晶专属</p>
-    <h1>每日祈福</h1>
-    <p class="subtitle">上天安排的最大。</p>
-    <section class="stage" aria-label="功德抽签筒">
-      <div class="orbit"></div>
-      <div class="machine"><div class="sticks" aria-hidden="true"><i class="stick"></i><i class="stick"></i><i class="stick"></i><i class="stick"></i></div></div>
-    </section>
-    <p class="hint">摇动手机，接收天庭随机扣款</p>
-    <button id="draw">每日摇一摇</button>
-    <section class="task">
-      <small>今日功德任务</small>
-      <p class="blessing">完成后福气 +999</p>
-    </section>
-    <section class="result" id="result" role="dialog" aria-modal="true" aria-labelledby="answer">
+    <div class="content">
+      <p class="eyebrow">功德充值中心 · 晶晶专属</p>
+      <h1>每日祈福</h1>
+      <p class="subtitle">上天安排的最大。</p>
+      <section class="stage" aria-label="功德抽签筒">
+        <div class="orbit"></div>
+        <div class="machine"><div class="sticks" aria-hidden="true"><i class="stick"></i><i class="stick"></i><i class="stick"></i><i class="stick"></i></div></div>
+      </section>
+      <p class="hint">摇动手机，接收天庭随机扣款</p>
+      <button id="draw">每日摇一摇</button>
+    </div>
+    <section class="result" id="result" role="dialog" aria-modal="true" aria-labelledby="answer" hidden>
       <div class="paper">
-        <small>天庭扣款通知</small>
+        <small>今日功德任务</small>
         <h2 id="answer"></h2>
-        <button class="again" id="again">再领功德</button>
+        <p class="blessing">完成后福气 +999</p>
+        <button class="again" id="again">再摇一次</button>
       </div>
     </section>
   </main>
@@ -64,12 +63,12 @@
       "给晶晶 500 元",
       "给晶晶 1000 元",
     ];
-    const draw=document.querySelector('#draw'),again=document.querySelector('#again'),result=document.querySelector('#result'),answer=document.querySelector('#answer'),frame=document.querySelector('.frame');
+    const draw=document.querySelector('#draw'),again=document.querySelector('#again'),result=document.querySelector('#result'),answer=document.querySelector('#answer'),frame=document.querySelector('.frame'),content=document.querySelector('.content');
     let drawing=false,motionReady=false,lastShake=0;
-    function drawWish(){if(drawing||result.classList.contains('show'))return;drawing=true;draw.disabled=true;frame.classList.add('shaking');setTimeout(()=>{frame.classList.remove('shaking');answer.textContent=wishes[Math.floor(Math.random()*wishes.length)];result.classList.add('show');again.focus();draw.disabled=false;drawing=false},1100)}
+    function drawWish(){if(drawing||result.classList.contains('show'))return;drawing=true;draw.disabled=true;content.inert=true;frame.classList.add('shaking');setTimeout(()=>{frame.classList.remove('shaking');answer.textContent=wishes[Math.floor(Math.random()*wishes.length)];result.hidden=false;result.classList.add('show');again.focus();draw.disabled=false;drawing=false},1100)}
     async function enableMotion(){if(motionReady||!window.DeviceMotionEvent)return;try{if(typeof DeviceMotionEvent.requestPermission==='function'&&await DeviceMotionEvent.requestPermission()!=='granted')return}catch{return}window.addEventListener('devicemotion',e=>{const a=e.accelerationIncludingGravity;if(!a)return;const force=Math.abs(a.x||0)+Math.abs(a.y||0)+Math.abs(a.z||0),now=Date.now();if(force>32&&now-lastShake>1800){lastShake=now;drawWish()}});motionReady=true}
     draw.onclick=()=>{enableMotion();drawWish()};
-    again.onclick=()=>{result.classList.remove('show');draw.focus()};
+    again.onclick=()=>{result.classList.remove('show');result.hidden=true;content.inert=false;draw.focus()};
   </script>
 </body>
 </html>
